@@ -1,42 +1,31 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { ProductsComponent } from './components/products/products.component';
-import { OrdersComponent } from './components/orders/orders.component';
-import { PurchasesComponent } from './components/purchases/purchases.component';
-import { CategoriesComponent } from './components/categories/categories.component';
-import { TagsComponent } from './components/tags/tags.component';
-import { CustomersComponent } from './components/customers/customers.component';
-import { UsersComponent } from './components/users/users.component';
-import { RolesComponent } from './components/roles/roles.component';
-import { ConfigurationComponent } from './components/configuration/configuration.component';
-import { StatisticsComponent } from './components/statistics/statistics.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import { MatTableModule } from '@angular/material/table';
+import { ProductsComponent } from './core/components/products/products.component';
+import { CustomersComponent } from './core/components/customers/customers.component';
+import { OrdersComponent } from './core/components/orders/orders.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    DashboardComponent,
     ProductsComponent,
-    OrdersComponent,
-    PurchasesComponent,
-    CategoriesComponent,
-    TagsComponent,
     CustomersComponent,
-    UsersComponent,
-    RolesComponent,
-    ConfigurationComponent,
-    StatisticsComponent
+    OrdersComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    HttpClientModule,
+    MatTableModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
