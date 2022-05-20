@@ -1,0 +1,40 @@
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+mat-sidenav-container {
+  height: 91vh;
+}
+
+mat-sidenav {
+  width: 250px;
+  margin: 0 2px;
+  padding: 0 10px;
+}
+
+mat-sidenav-content {
+  padding: 20px;
+}
+
+mat-card {
+  transition: border-radius cubic-bezier(0.3, 0, 1, 1) 250ms;
+  padding: 30px;
+  border-radius: 32px;
+}
+
+.mat-nav-list a.active {
+  background: #c2e7ff;
+}
+
+.mat-nav-list a.active:hover {
+  background: #5ab3f0;
+}
+
+.mat-nav-list a.active .mat-line, .mat-nav-list a.active .mat-list-icon {
+  font-weight: 500;
+}
+
+.mat-nav-list .mat-list-item {
+  border-radius: 18px;
+  margin: 5px 0px;
+}

@@ -1,0 +1,63 @@
+<h2 mat-dialog-title>Editar producto</h2>
+<mat-dialog-content class="mat-typography">
+  <form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+    <mat-form-field appearance="outline">
+      <mat-label>Código</mat-label>
+      <input matInput formControlName="code" placeholder="Ej. 782634983748" />
+      <mat-icon matSuffix>qr_code_scanner</mat-icon>
+    </mat-form-field>
+    <br />
+    <mat-form-field style="width: 695px" appearance="outline">
+      <mat-label>Descripción</mat-label>
+      <textarea
+        matInput
+        #textareaDescription
+        [maxlength]="256"
+        formControlName="name"
+        placeholder="Ej. Juguete Rojo Mediano"
+      ></textarea>
+      <mat-icon matSuffix>description</mat-icon>
+      <mat-hint align="end">
+        {{ textareaDescription.value?.length || 0 }}/256
+      </mat-hint>
+    </mat-form-field>
+    <br />
+    <mat-form-field appearance="outline">
+      <mat-label>Precio de Venta</mat-label>
+      <input matInput type="number" formControlName="salePrice" />
+      <mat-icon matSuffix>price_change</mat-icon>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Precio de Compra</mat-label>
+      <input matInput type="number" formControlName="purchasePrice" />
+      <mat-icon matSuffix>price_change</mat-icon>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Precio de Mayoreo</mat-label>
+      <input matInput type="number" formControlName="wholesalePrice" />
+      <mat-icon matSuffix>price_change</mat-icon>
+    </mat-form-field>
+    <br />
+    <mat-form-field appearance="outline">
+      <mat-label>Unidades en existencia</mat-label>
+      <input matInput type="number" formControlName="unitsInStock" />
+      <mat-icon matSuffix>inventory_2</mat-icon>
+    </mat-form-field>
+    <mat-form-field style="width: 460px" appearance="outline">
+      <mat-label>Seleccionar categoría</mat-label>
+      <mat-select formControlName="productCategory" [compareWith]="compareCategories">
+        <mat-optgroup *ngFor="let department of departmentList" [label]="department.name">
+            <mat-option *ngFor="let category of department.productCategories" [value]="category">
+                {{ category.name }}
+            </mat-option>
+          </mat-optgroup>
+      </mat-select>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancelar</button>
+  <button mat-raised-button (click)="submitForm()" color="primary">
+    Guardar
+  </button>
+</mat-dialog-actions>

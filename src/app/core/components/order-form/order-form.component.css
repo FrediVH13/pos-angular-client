@@ -1,0 +1,17 @@
+tr.mat-footer-row {
+  font-weight: bold;
+}
+.mat-table-sticky {
+  border-top: 1px solid #e0e0e0;
+}
+/*.mat-row:nth-child(even){
+  background-color: rgb(181, 177, 177);
+}
+      
+.mat-row:nth-child(odd){
+  background-color: black;
+}*/
+
+mat-form-field {
+  margin: 0 5px;
+}

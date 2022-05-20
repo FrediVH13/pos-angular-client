@@ -1,0 +1,5 @@
+export enum Status {
+  OUT_OF_STOCK = 'FUERA DE INVENTARIO',
+  IN_STOCK = 'EN INVENTARIO',
+  LOW_STOCK = 'POCO INVENTARIO',
+}
