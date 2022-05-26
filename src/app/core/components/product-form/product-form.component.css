@@ -1,3 +1,23 @@
 mat-form-field {
-    margin: 0 5px;
+  margin: 0 5px;
+}
+
+.container {
+  height: 150px;
+  width: 150px;
+  position: relative;
+  background: #c2e7ff;
+  text-align: center;
+  border-radius: 18px;
+}
+
+.center {
+  margin: 0;
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  font-size: 50px;
 }

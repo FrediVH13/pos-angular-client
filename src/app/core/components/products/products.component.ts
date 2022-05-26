@@ -36,7 +36,7 @@ export class ProductsComponent implements OnInit {
     this.getProducts();
   }
 
-  openDialog(product?: Product) {
+  openDialog(product?: Product): void {
     const dialogRef = this.dialog.open(ProductFormComponent, {
       disableClose: true,
       data: product,

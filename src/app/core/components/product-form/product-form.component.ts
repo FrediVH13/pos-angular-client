@@ -1,7 +1,7 @@
-import { ProductTags } from './../../../shared/models/product-tags.model';
 import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Category } from 'src/app/shared/interfaces/category';
 import { Department } from 'src/app/shared/interfaces/department';
 import { Product } from 'src/app/shared/interfaces/product';
@@ -14,6 +14,9 @@ import { ProductsService } from '../../services/products.service';
   styleUrls: ['./product-form.component.css'],
 })
 export class ProductFormComponent implements OnInit {
+  message: string = 'Producto modificado con éxito.';
+  imageUrl = 'assets/images/unnamed.png';
+  selectedImage: string = '';
   isVisible = false;
   validateForm!: FormGroup;
   formatterDollar = (value: number): string => `$ ${value}`;
@@ -25,7 +28,8 @@ export class ProductFormComponent implements OnInit {
     private dialogRef: MatDialogRef<ProductFormComponent>,
     private categoryService: CategoriesService,
     private productService: ProductsService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private _snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -75,17 +79,27 @@ export class ProductFormComponent implements OnInit {
     return cat1.id == cat2.id && cat1.name == cat2.name;
   }
 
+  onSelectFile(event: any) {
+    if (event.target.files) {
+      var reader = new FileReader();
+      this.selectedImage = event.target.files[0];
+      reader.readAsDataURL(event.target.files[0]);
+      reader.onload = (e: any) => (this.imageUrl = e.target.result);
+    }
+  }
+
   submitForm(): void {
     if (this.validateForm.valid) {
       const product = this.validateForm.value;
       if (product.id) {
         this.productService.update(product, product.id).subscribe((res) => {
-          console.log(res);
           this.dialogRef.close();
+          this._snackBar.open('Producto modificado exitosamente.', '', {
+            duration: 2 * 1000,
+          });
         });
       } else {
         this.productService.new(product).subscribe((res) => {
-          console.log(res);
           this.dialogRef.close();
         });
       }

@@ -17,15 +17,14 @@ export class ProductsService {
     return this.http.get<Product[]>(this.API_URL);
   }
 
-  new(data: any, image?: string): Observable<Product> {
+  new(data: Product): Observable<Product> {
     const body = JSON.stringify(data);
-    console.log(body);
-    return this.http.post<Product>(`${this.API_URL}`, body, {
+    return this.http.post<Product>(this.API_URL, body, {
       headers: this.headers,
     });
   }
 
-  update(data: any, id: string, image?: string): Observable<Product> {
+  update(data: Product, id: string): Observable<Product> {
     const body = JSON.stringify(data);
     return this.http.put<Product>(`${this.API_URL}/${id}`, body, {
       headers: this.headers,

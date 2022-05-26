@@ -1,21 +1,26 @@
 <h2 mat-dialog-title>Editar producto</h2>
 <mat-dialog-content class="mat-typography">
   <form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+    <div style="text-align: center">
+      <img [src]="imageUrl" (click)="fileUploader.click()" alt="productImage" width="150" height="150" style="border-radius: 18px; cursor: pointer;" />
+      <br/>
+      <input type="file" accept="image/*" style="display: none;" #fileUploader (change)="onSelectFile($event)" />
+    </div>
+    <br />
     <mat-form-field appearance="outline">
       <mat-label>Código</mat-label>
       <input matInput formControlName="code" placeholder="Ej. 782634983748" />
       <mat-icon matSuffix>qr_code_scanner</mat-icon>
     </mat-form-field>
-    <br />
-    <mat-form-field style="width: 695px" appearance="outline">
+    <mat-form-field style="width: 460px" appearance="outline">
       <mat-label>Descripción</mat-label>
-      <textarea
+      <input
         matInput
         #textareaDescription
         [maxlength]="256"
         formControlName="name"
         placeholder="Ej. Juguete Rojo Mediano"
-      ></textarea>
+      />
       <mat-icon matSuffix>description</mat-icon>
       <mat-hint align="end">
         {{ textareaDescription.value?.length || 0 }}/256
@@ -45,12 +50,20 @@
     </mat-form-field>
     <mat-form-field style="width: 460px" appearance="outline">
       <mat-label>Seleccionar categoría</mat-label>
-      <mat-select formControlName="productCategory" [compareWith]="compareCategories">
-        <mat-optgroup *ngFor="let department of departmentList" [label]="department.name">
-            <mat-option *ngFor="let category of department.productCategories" [value]="category">
-                {{ category.name }}
-            </mat-option>
-          </mat-optgroup>
+      <mat-select
+        formControlName="productCategory" [compareWith]="compareCategories"
+      >
+        <mat-optgroup
+          *ngFor="let department of departmentList"
+          [label]="department.name"
+        >
+          <mat-option
+            *ngFor="let category of department.productCategories"
+            [value]="category"
+          >
+            {{ category.name }}
+          </mat-option>
+        </mat-optgroup>
       </mat-select>
     </mat-form-field>
   </form>

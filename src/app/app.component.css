@@ -19,7 +19,7 @@ mat-sidenav-content {
 mat-card {
   transition: border-radius cubic-bezier(0.3, 0, 1, 1) 250ms;
   padding: 30px;
-  border-radius: 32px;
+  border-radius: 18px;
 }
 
 .mat-nav-list a.active {

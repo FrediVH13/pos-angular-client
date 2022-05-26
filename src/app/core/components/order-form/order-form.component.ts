@@ -1,43 +1,33 @@
+import { PaymentMenthod } from './../../../shared/interfaces/payment-method';
+import { CustomersService } from './../../services/customers.service';
+import { OrdersService } from './../../services/orders.service';
+import { Order } from './../../../shared/interfaces/order';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatTable } from '@angular/material/table';
+import { OrderLine } from 'src/app/shared/interfaces/order-line';
 import { Product } from 'src/app/shared/interfaces/product';
 import { ProductsService } from '../../services/products.service';
-
-export interface OrderLine {
-  productId: number;
-  productCode: string;
-  productName: string;
-  unitsInStock: number;
-  unitPrice: number;
-  quantity: number;
-  subTotal: number;
-}
-
-export const DATE_FORMATS = {
-  parse: {
-    dateInput: 'DD/MM/YYYY',
-  },
-  display: {
-    dateInput: 'DD/MM/YYYY',
-    monthYearLabel: 'MMMM YYYY',
-    dateA11yLabel: 'LL',
-    monthYearA11yLabel: 'MMMM YYYY',
-  },
-};
+import { Customer } from 'src/app/shared/interfaces/customer';
 
 @Component({
   selector: 'app-order-form',
   templateUrl: './order-form.component.html',
   styleUrls: ['./order-form.component.css'],
   providers: [
-    { provide: MAT_DATE_FORMATS, useValue: DATE_FORMATS },
     { provide: MAT_DATE_LOCALE, useValue: 'es' },
   ],
 })
 export class OrderFormComponent implements OnInit {
+  dataSource: OrderLine[] = [];
+  products!: Product[];
+  customers!: Customer[];
+  paymentMethods!: PaymentMenthod[];
   orderDate = new FormControl(new Date());
+  customerSelected = new FormControl();
+  paymentMethodSelected = new FormControl();
+  orderDateModel: string = '';
   displayedColumns: string[] = [
     'quantity',
     'productName',
@@ -46,15 +36,20 @@ export class OrderFormComponent implements OnInit {
     'subTotal',
     'delete',
   ];
-  dataSource: OrderLine[] = [];
-  products!: Product[];
+
   @ViewChild('productCode') productCode!: ElementRef;
   @ViewChild(MatTable) table!: MatTable<OrderLine>;
 
-  constructor(private productService: ProductsService) {}
+  constructor(
+    private productService: ProductsService,
+    private ordersService: OrdersService,
+    private customersService: CustomersService
+  ) {}
 
   ngOnInit(): void {
     this.getProducts();
+    this.getCustomers();
+    this.getPaymentMethods();
   }
 
   getProducts() {
@@ -63,12 +58,39 @@ export class OrderFormComponent implements OnInit {
     });
   }
 
+  getCustomers() {
+    this.customersService.getAll().subscribe((res) => {
+      this.customers = res;
+      this.customerSelected.setValue(res[0]);
+    });
+  }
+
+  getPaymentMethods() {
+    this.customersService.getAllPaymentMethods().subscribe((res) => {
+      this.paymentMethods = res;
+      this.paymentMethodSelected.setValue(res[0]);
+    });
+  }
+
+  saveOrder() {
+    let order: Order = {
+      customer: this.customerSelected.value,
+      paymentMethod: this.paymentMethodSelected.value,
+      user: null,
+      orderDate: this.orderDate.value,
+      amountTendered: 456,
+      orderLines: this.dataSource,
+      totalAmount: this.getTotalCost(),
+    };
+    this.ordersService.new(order).subscribe((res) => console.log(res));
+  }
+
   addProduct(event: Event) {
     const code = (event.target as HTMLInputElement).value;
     if (code.length >= 10) {
       let b = false;
       this.dataSource.forEach((orderLine, index) => {
-        if (orderLine.productCode === code) {
+        if (orderLine.product.code === code) {
           b = true;
           this.dataSource[index].quantity++;
           this.dataSource[index].subTotal =
@@ -80,10 +102,7 @@ export class OrderFormComponent implements OnInit {
         const product = this.products.find((product) => product.code === code);
         if (product) {
           this.dataSource.push({
-            productId: product.id,
-            productCode: product.code,
-            productName: product.name,
-            unitsInStock: product.unitsInStock,
+            product: product,
             unitPrice: product.salePrice,
             quantity: 1,
             subTotal: product.salePrice,
@@ -102,7 +121,7 @@ export class OrderFormComponent implements OnInit {
     this.table.renderRows();
   }
 
-  getTotalCost() {
+  getTotalCost(): number {
     return this.dataSource
       .map((p) => p.subTotal)
       .reduce((acc, value) => acc + value, 0);
